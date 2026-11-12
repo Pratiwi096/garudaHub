@@ -37,6 +37,21 @@
         </div>
     </div>
 
+    {{-- Tombol edit dan hapus: hanya pemilik proyek dan admin --}}
+    @auth
+        @if ($user->isAdmin() || $project->client_id === $user->id)
+            <div style="display:flex; gap:0.75rem; margin-bottom:1.5rem;">
+                <a href="{{ route('projects.edit', $project) }}" class="btn" style="width:auto; padding:0.5rem 1.25rem;">Edit</a>
+
+                <form method="POST" action="{{ route('projects.destroy', $project) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn" style="width:auto; padding:0.5rem 1.25rem; background:#b91c1c;">Hapus</button>
+                </form>
+            </div>
+        @endif
+    @endauth
+
     {{-- Form penawaran: hanya developer, hanya kalau lelang masih buka --}}
     @auth
         @if ($user->isDeveloper() && $project->isOpen())
@@ -60,46 +75,4 @@
 
                     <div class="form-group">
                         <label for="proposal">Proposal</label>
-                        <textarea id="proposal" name="proposal" rows="4" style="width:100%; padding:0.65rem 0.8rem; border:1px solid var(--border-color); border-radius:6px;" required>{{ old('proposal') }}</textarea>
-                        @error('proposal') <p class="field-error">{{ $message }}</p> @enderror
-                    </div>
-
-                    <button type="submit" class="btn">Kirim Penawaran</button>
-                </form>
-            </div>
-        @endif
-    @endauth
-
-    {{-- Daftar penawaran: hanya pemilik proyek dan admin --}}
-    @auth
-        @if ($user->isAdmin() || $project->client_id === $user->id)
-            <h2 style="margin-bottom:1rem;">Penawaran Masuk ({{ $project->bids->count() }})</h2>
-
-            @forelse ($project->bids as $bid)
-                <div class="card" style="margin-bottom:1rem;">
-                    <div>
-                        <p class="card-title">{{ $bid->developer->name }}</p>
-                        <p class="client-name" style="margin-bottom:0.75rem;">
-                            Rp {{ number_format($bid->price, 0, ',', '.') }}
-                            &middot; {{ $bid->duration_days }} hari
-                            &middot; {{ $bid->status }}
-                        </p>
-                        <p style="line-height:1.6;">{!! nl2br(e($bid->proposal)) !!}</p>
-                    </div>
-
-                    @if ($project->client_id === $user->id && $project->status !== 'awarded')
-                        <div class="card-footer">
-                            <form method="POST" action="{{ route('bids.accept', $bid) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn">Pilih Pemenang</button>
-                            </form>
-                        </div>
-                    @endif
-                </div>
-            @empty
-                <p class="empty">Belum ada penawaran.</p>
-            @endforelse
-        @endif
-    @endauth
-@endsection
+                        <textarea id="proposal" name="proposal" rows="4" style="width:100%; padding:0.65rem 0.8rem; border:1px solid var(--border-color);
