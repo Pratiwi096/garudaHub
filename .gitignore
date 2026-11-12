@@ -1,27 +1,22 @@
-*.log
-.DS_Store
+# Rahasia
 .env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/public/build
-/public/fonts-manifest.dev.json
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-_ide_helper.php
-Homestead.json
-Homestead.yaml
-Thumbs.db
+.env.*
+*.pem
+*.key
+
+# Dependensi & build
+node_modules/
+dist/
+__pycache__/
+.venv/
+
+# Lokal Claude
+.claude/settings.local.json
+
+# Perkakas tim agen (tidak dipublikasikan)
+.claude/
+CLAUDE.md
+SETUP.md
+
+# Kunci jawaban celah untuk dosen (tidak dipublikasikan)
+docs/VULNERABILITIES.md
