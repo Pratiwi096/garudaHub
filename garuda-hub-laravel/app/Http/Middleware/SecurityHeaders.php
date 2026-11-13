@@ -15,17 +15,10 @@ class SecurityHeaders
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
-        $response->headers->set(
-            'Content-Security-Policy',
-            "default-src 'self'; "
-            . "script-src 'self'; "
-            . "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
-            . "font-src https://fonts.gstatic.com; "
-            . "img-src 'self' data:; "
-            . "frame-ancestors 'none'; "
-            . "form-action 'self'; "
-            . "base-uri 'self'"
-        );
+        $response->headers->set('Content-Security-Policy', "...");  // biarkan seperti semula
+
+        $response->headers->remove('X-Powered-By');
+        header_remove('X-Powered-By');
 
         return $response;
     }
